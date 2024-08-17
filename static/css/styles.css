@@ -1,0 +1,109 @@
+        :root {
+            --primary-color: #58cc02;
+            --secondary-color: #fff;
+            --text-color: #3c3c3c;
+            --background-color: #f7f7f7;
+            --wrong-color: #ea2b2b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        #word-display {
+            margin-bottom: 2rem;
+        }
+
+        #kannada-word {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        #transliteration {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        button:hover {
+            background-color: #45a100;
+        }
+
+        #user-answer {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        #result {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .correct {
+            background-color: #e7fbd3;
+            color: #4CAF50;
+        }
+
+        .incorrect {
+            background-color: #fde7e7;
+            color: var(--wrong-color);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            #kannada-word {
+                font-size: 2rem;
+            }
+
+            button {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }

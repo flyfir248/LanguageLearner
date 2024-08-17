@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannada Learning App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Kannada Learning App</h1>
+        <div id="word-display">
+            <p id="kannada-word"></p>
+            <p id="transliteration"></p>
+        </div>
+        <button onclick="playAudio()">Play Audio</button>
+        <input type="text" id="user-answer" placeholder="Enter translation" onkeypress="checkEnter(event)">
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="result"></p>
+    </div>
+
+    <audio id="correctSound" src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/demo/_mp3/sm2_button-click.mp3"></audio>
+    <audio id="incorrectSound" src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/demo/_mp3/fail-buzzer-03.mp3"></audio>
+     <script>
+        let currentWord = {};
+        const correctSound = document.getElementById('correctSound');
+        const incorrectSound = document.getElementById('incorrectSound');
+        let audioElement = null;
+
+        function getRandomWord() {
+            fetch('/get_word')
+                .then(response => response.json())
+                .then(word => {
+                    currentWord = word;
+                    document.getElementById('kannada-word').textContent = word.kannada;
+                    document.getElementById('transliteration').textContent = word.transliteration;
+                    document.getElementById('user-answer').value = '';
+                    document.getElementById('result').textContent = '';
+                    document.getElementById('result').className = '';
+                    playAudio();
+                });
+        }
+
+        function playAudio() {
+            if (audioElement) {
+                audioElement.pause();
+            }
+            audioElement = new Audio(`/audio?text=${encodeURIComponent(currentWord.kannada)}`);
+            audioElement.play();
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('user-answer').value;
+            fetch('/check', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    answer: userAnswer,
+                    english: currentWord.english
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultElement = document.getElementById('result');
+                if (data.result === 'correct') {
+                    resultElement.textContent = 'Correct!';
+                    resultElement.className = 'correct';
+                    correctSound.play();
+                } else {
+                    resultElement.textContent = `Incorrect. The correct answer is: ${data.correct_answer}`;
+                    resultElement.className = 'incorrect';
+                    incorrectSound.play();
+                }
+                setTimeout(() => {
+                    getRandomWord();
+                }, 2000);
+            });
+        }
+
+        function checkEnter(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        getRandomWord();
+    </script>
+</body>
+</html>
